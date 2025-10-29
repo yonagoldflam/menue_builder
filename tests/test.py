@@ -1,4 +1,4 @@
-from main import MenuBuilder
+from menu_builder.menu_builder import MenuBuilder
 
 def print_hello():
     print('hello')

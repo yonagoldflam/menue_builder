@@ -19,15 +19,15 @@ class MenuBuilder:
                 return 'exit'
             if choose == requested_back:
                 if is_root:
-                    print('you are already on the main menu')
+                    print('you are already on the tests menu')
                     continue
                 else:
                     return ''
             if choose == requested_main:
                 if is_root:
-                    print('you are already on the main menu')
+                    print('you are already on the tests menu')
                     continue
-                return 'main'
+                return 'tests'
             index_choose: int = int(choose) - 1
             if index_choose >= len(options):
                 print('invalid choice!! please enter your choice again')
@@ -40,7 +40,6 @@ class MenuBuilder:
                 result = self.build_menu(selected_menu, requested_exit, requested_main, requested_back, is_root=False)
                 if result == 'exit':
                     return 'exit'
-                if result == 'main':
+                if result == 'tests':
                     if not is_root:
-                        return 'main'
-
+                        return 'tests'
