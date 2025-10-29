@@ -1,4 +1,5 @@
-from menu_builder.menu_builder import *
+from menu_builder.menu_builder import MenuBuilder
+from io_selection.console_io import ConsoleIo
 
 def print_hello():
     print('hello')

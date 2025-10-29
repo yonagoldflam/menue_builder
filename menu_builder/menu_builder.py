@@ -1,27 +1,12 @@
 from typing import Callable, TypeAlias, Union
-from abc import ABC, abstractmethod
+
 
 Menu: TypeAlias = dict[str, Union[Callable[[], None], dict]]
-
-class MenuIo(ABC):
-    @abstractmethod
-    def output(self, message: str) -> str:
-        pass
-    @abstractmethod
-    def input(self, prompt: str) -> str:
-        pass
-
-class ConsoleIo(MenuIo):
-    def output(self, message: str) -> None:
-        print(message)
-
-    def input(self, user_guide: str) -> str:
-        return input(user_guide)
 
 
 class MenuBuilder:
 
-    def __init__(self, io:MenuIo) -> None:
+    def __init__(self, io) -> None:
         self.io = io
 
     def build_menu(self, menu: Menu, requested_exit: str = '*',requested_main:str = '#', requested_back: str = '0', is_root: bool = True) -> Union[str, None]:
