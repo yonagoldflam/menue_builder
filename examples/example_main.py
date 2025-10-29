@@ -1,4 +1,4 @@
-from menu_builder.menu_builder import MenuBuilder
+from menu_builder.menu_builder import *
 
 def print_hello():
     print('hello')
@@ -18,6 +18,6 @@ def print_name():
 
 
 menu = {'print': {'hello': {'world': prnt_world, 'home': print_home}, 'world': prnt_world}, 'print name': print_name}
-
-t = MenuBuilder()
+io = ConsoleIo()
+t = MenuBuilder(io)
 a = t.build_menu(menu)
