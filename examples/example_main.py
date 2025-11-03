@@ -1,7 +1,7 @@
 from menu_building.menu_builder import MenuBuilder
 from io_selection.console_io import ConsoleIo
 from menu_building.main_manu import MainMenu
-# from menu_building.menu_item import MenuItem
+
 
 
 
@@ -38,4 +38,5 @@ main_menu.add_function_item('zalmen', 'shneyor', name = 'print name', function=p
 
 io = ConsoleIo()
 t = MenuBuilder(io)
+t.build_menu(menu=main_menu, requested_main='10', requested_back='20', requested_exit='30')
 t.build_menu(main_menu)

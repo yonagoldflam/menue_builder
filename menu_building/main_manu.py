@@ -1,4 +1,3 @@
-from keyword import kwlist
 from typing import List, Callable
 
 from menu_building.menu_item import MenuItem
@@ -15,10 +14,3 @@ class MainMenu:
     def add_function_item(self, *args, name: str, function: Callable):
         item = MenuItem(name = name, function=function, args = args)
         self.items.append(item)
-
-# def test(*args, **kwargs):
-#     # args = list(args)
-#     # kwargs = dict(kwargs)
-#     print(args[0], kwargs)
-# # kwarg = {'a':1, 'b':2, 'c':3}
-# test('a')

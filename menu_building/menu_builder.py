@@ -1,4 +1,4 @@
-from typing import Callable, TypeAlias, Union, List
+from typing import Union, List
 from menu_building.main_manu import MainMenu
 from menu_building.menu_item import MenuItem
 
