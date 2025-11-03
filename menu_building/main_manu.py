@@ -1,3 +1,4 @@
+from keyword import kwlist
 from typing import List, Callable
 
 from menu_building.menu_item import MenuItem
@@ -7,14 +8,17 @@ class MainMenu:
         self.title = title
         self.items: List[MenuItem] = []
 
-    def add_item(self, name: str, sub_menu: 'MainMenu' = None, function: Callable = None):
-        item = MenuItem(name, sub_menu=sub_menu, function=function)
+    def add_sub_menu_item(self, name: str, sub_menu: 'MainMenu'):
+        item = MenuItem(name = name, sub_menu=sub_menu)
         self.items.append(item)
 
+    def add_function_item(self, *args, name: str, function: Callable):
+        item = MenuItem(name = name, function=function, args = args)
+        self.items.append(item)
 
-# class Manager:
-#     def __init__(self):
-#         self.items: List[MenuItem] = []
-#
-#     def add_item(self, name: str, sub_menu: MainMenu = None, function: Callable = None):
-#         self.items.append(MenuItem(name, sub_menu, function))
+# def test(*args, **kwargs):
+#     # args = list(args)
+#     # kwargs = dict(kwargs)
+#     print(args[0], kwargs)
+# # kwarg = {'a':1, 'b':2, 'c':3}
+# test('a')

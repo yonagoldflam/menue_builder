@@ -36,7 +36,7 @@ class MenuBuilder:
                 continue
             choose_option: MenuItem = items[index_choose]
             if choose_option.is_function():
-                choose_option.function()
+                choose_option.execute()
             elif choose_option.is_sub_menu():
                 result = self.build_menu(choose_option.sub_menu, requested_exit, requested_main, requested_back, is_root = False)
                 if result == 'exit':

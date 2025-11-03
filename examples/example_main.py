@@ -3,6 +3,8 @@ from io_selection.console_io import ConsoleIo
 from menu_building.main_manu import MainMenu
 # from menu_building.menu_item import MenuItem
 
+
+
 def print_hello():
     print('hello')
 
@@ -15,24 +17,25 @@ def print_home():
     print('home')
 
 
-def print_name():
-    name = input('enter your name: ')
-    print(name)
+def print_name(*names):
+    # name = input('enter your name: ')
+    for name in names:
+        print(name)
 
 
 # menu = {'print': {'hello': {'world': print_world, 'home': print_home}, 'world': print_world}, 'print name': print_name}
 hello = MainMenu('hello')
-hello.add_item('home', function=print_home)
-hello.add_item('world', function=print_world)
+hello.add_function_item(name = 'home', function=print_home)
+hello.add_function_item(name = 'world', function=print_world)
 
 printt = MainMenu('print')
-printt.add_item('hello', sub_menu= hello)
-printt.add_item('world', function=print_world)
+printt.add_sub_menu_item('hello', sub_menu= hello)
+printt.add_function_item(name = 'world', function=print_world)
 
 main_menu = MainMenu('main menu')
-main_menu.add_item('print', sub_menu=printt)
-main_menu.add_item('print name', function=print_name)
+main_menu.add_sub_menu_item('print', sub_menu=printt)
+main_menu.add_function_item('zalmen', 'shneyor', name = 'print name', function=print_name)
 
 io = ConsoleIo()
 t = MenuBuilder(io)
-a = t.build_menu(main_menu)
+t.build_menu(main_menu)
