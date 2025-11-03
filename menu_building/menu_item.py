@@ -13,7 +13,7 @@ class MenuItem:
     def is_sub_menu(self) -> bool:
         return self.sub_menu is not None
 
-    def input_arguments(self, io):
+    def input_arguments(self, io) -> None:
         if self.parms:
             for parm in self.parms:
                 arg = io.input(f'enter argument for {parm}: ')

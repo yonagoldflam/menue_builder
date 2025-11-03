@@ -1,5 +1,6 @@
 from typing import Union, List, Callable
 from menu_building.menu_item import MenuItem
+from consts import *
 
 
 class MenuBuilder:
@@ -8,7 +9,6 @@ class MenuBuilder:
         self.io = io
         self.title = title
         self.items: List[MenuItem] = []
-        self.args: dict = {}
 
     def add_sub_menu_item(self, name: str, sub_menu: 'MenuBuilder'):
         item = MenuItem(name=name, sub_menu=sub_menu)
@@ -30,7 +30,7 @@ class MenuBuilder:
                 continue
 
             if choose == requested_exit:
-                return 'exit'
+                return EXIT_MENU
 
             if choose == requested_back:
                 if is_root:
@@ -43,25 +43,30 @@ class MenuBuilder:
                 if is_root:
                     self.io.output('you are already on the main menu')
                     continue
-                return 'main'
+                return BACK_MAIN_MENU
+
             index_choose: int = int(choose) - 1
             items: List[MenuItem] = menu.items
 
             if index_choose >= len(items):
                 self.io.output('invalid choice!! please enter your choice again')
                 continue
-            choose_option: MenuItem = items[index_choose]
 
-            if choose_option.is_function():
-                choose_option.input_arguments(self.io)
-                choose_option.execute()
+            item_choose: MenuItem = items[index_choose]
 
-            elif choose_option.is_sub_menu():
-                result = choose_option.sub_menu.run_menu(choose_option.sub_menu, requested_exit, requested_main, requested_back, is_root=False)
+            if item_choose.is_function():
+                item_choose.input_arguments(self.io)
+                item_choose.execute()
 
-                if result == 'exit':
-                    return 'exit'
+            elif item_choose.is_sub_menu():
+                result = item_choose.sub_menu.run_menu(item_choose.sub_menu, requested_exit, requested_main, requested_back, is_root=False)
 
-                if result == 'main':
+                if result == EXIT_MENU:
+                    return EXIT_MENU
+
+                if result == BACK_MAIN_MENU:
                     if not is_root:
-                        return 'main'
+                        return BACK_MAIN_MENU
+
+    def validation(self, *testers: tuple[bool], tested):
+        pass
