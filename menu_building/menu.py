@@ -1,14 +1,13 @@
 from typing import Union, List, Callable
-from menu_building.menu_item import MenuItem
+from menu_building.items.function_item import FunctionItem
 from consts import *
-from enum import Enum
 
 class Menu:
 
     def __init__(self, io, title: str, requested_exit: str = '*',requested_main:str = '#', requested_back: str = '0') -> None:
         self.io = io
         self.title = title
-        self.items: List[MenuItem] = []
+        self.items: List[Union[FunctionItem, Menu]] = []
         self.requested_exit = requested_exit
         self.requested_main = requested_main
         self.requested_back = requested_back
@@ -41,7 +40,7 @@ class Menu:
                 self.io.output('invalid choice!! please enter your choice again')
                 continue
 
-            item_choice: MenuItem = self.items[index_choice]
+            item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
             self.execute_if_is_function(item_choice)
             result = self.run_sub_menu(item_choice, is_root)
             if result == EXIT_MENU:
@@ -50,24 +49,24 @@ class Menu:
             if result == BACK_MAIN_MENU:
                 return BACK_MAIN_MENU
 
-    def run_sub_menu(self, item_choice: MenuItem, is_root: bool) :
-        if item_choice.is_sub_menu():
-            result = item_choice.sub_menu.run_menu(is_root=False)
+    def run_sub_menu(self, item_choice: Union['Menu', FunctionItem], is_root: bool) :
+        if isinstance(item_choice, Menu):
+            result = item_choice.run_menu(is_root=False)
             if result == BACK_MAIN_MENU and is_root:
                 result = None
             return result
         return None
 
-    def output_menu_and_input_choice(self, items: List[MenuItem] ) -> str:
+    def output_menu_and_input_choice(self, items: List[Union['Menu', FunctionItem]] ) -> str:
         for number, item in enumerate(items):
-            self.io.output(f'{number + 1} - {item.name}')
+            self.io.output(f'{number + 1} - {item.title}')
         self.io.output(f'{self.requested_back} - back to the previous menu')
         self.io.output(f'{self.requested_main} - return to the main menu')
         self.io.output(f'{self.requested_exit} - exiting the program')
         return self.io.input('enter your choice: ')
 
-    def execute_if_is_function(self, item_choice: MenuItem) -> None:
-        if item_choice.is_function():
+    def execute_if_is_function(self, item_choice: Union['Menu', FunctionItem]) -> None:
+        if isinstance(item_choice, FunctionItem):
             item_choice.input_arguments(self.io)
             item_choice.execute()
 
