@@ -13,12 +13,6 @@ class MenuBuilder:
 
     def add_sub_menu_item(self, menu_title: str, sub_menu_title: str):
         self.menus[menu_title].items.append(self.menus[sub_menu_title])
-        # for menu in self.menus:
-        #     if menu.title == menu_title:
-        #         for sub_menu in self.menus:
-        #             if sub_menu.title == sub_menu_title:
-        #                 # item = SubMenuItem(title=sub_menu_title, sub_menu=sub_menu)
-        #                 menu.items.append(sub_menu)
 
     def add_function_item(self, *args, menu_title: str, name: str, function: Callable, parms: List[str] = None):
         item = FunctionItem(title=name, function=function, args=args, parms=parms)

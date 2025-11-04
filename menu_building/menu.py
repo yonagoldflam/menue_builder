@@ -1,10 +1,10 @@
-from typing import Union, List, Callable
+from typing import Union, List
 from menu_building.items.function_item import FunctionItem
 from consts import *
 
 class Menu:
 
-    def __init__(self, io, title: str, requested_exit: str = '*',requested_main:str = '#', requested_back: str = '0') -> None:
+    def __init__(self, io, title: str, requested_exit: str = DEFAULT_EXIT_KEY, requested_main:str = DEFAULT_MAIN_KEY, requested_back: str = DEFAULT_BACK_KEY) -> None:
         self.io = io
         self.title = title
         self.items: List[Union[FunctionItem, Menu]] = []
