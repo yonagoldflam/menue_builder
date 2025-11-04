@@ -27,16 +27,18 @@ def print_name(*names, name1, name2):
 
 io = ConsoleIo()
 
-hello = MenuBuilder(io=io, title= 'hello')
-hello.add_function_item(name = 'home', function=print_home)
-hello.add_function_item(name = 'world', function=print_world)
+menu_builder = MenuBuilder()
 
-printt = MenuBuilder(io=io, title='print')
-printt.add_sub_menu_item('hello', sub_menu= hello)
-printt.add_function_item(name = 'world', function=print_world)
+menu_builder.add_menu(io=io, title= 'hello')
+menu_builder.add_function_item(menu_title='hello', name = 'home', function=print_home)
+menu_builder.add_function_item(menu_title='hello',name = 'world', function=print_world)
 
-main_menu = MenuBuilder(io = io, title = 'main menu')
-main_menu.add_sub_menu_item('print', sub_menu=printt)
-main_menu.add_function_item('zalmen', 'shneyor', name = 'print name', function=print_name, parms=['name1', 'name2'])
+menu_builder.add_menu(io=io, title='print')
+menu_builder.add_sub_menu_item('print', sub_menu_title= 'hello')
+menu_builder.add_function_item(menu_title= 'print', name = 'world', function=print_world)
 
-main_menu.run_menu()
+menu_builder.add_menu(io = io, title = 'main menu')
+menu_builder.add_sub_menu_item('main menu', sub_menu_title='print')
+menu_builder.add_function_item('zalmen', 'shneyor', menu_title='main menu',name = 'print name', function=print_name, parms=['name1', 'name2'])
+
+menu_builder.run_menu('main menu')
