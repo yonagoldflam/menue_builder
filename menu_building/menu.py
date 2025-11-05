@@ -53,17 +53,18 @@ class Menu:
         if abc_option:
             for number, item in enumerate(items):
                 self.io.output(f'{chr(number + 65)} - {item.title}')
-            self.io.output(f'{self.requested_back} - {MenuIcons.BACK}')
-            self.io.output(f'{self.requested_main} - {MenuIcons.BACK_MAIN}')
-            self.io.output(f'{self.requested_exit} - {MenuIcons.EXIT}')
+            self.out_put_menu_icon_options()
             return self.io.input('enter your choice: ')
 
         for number, item in enumerate(items):
             self.io.output(f'{number + 1} - {item.title}')
+        self.out_put_menu_icon_options()
+        return self.io.input('enter your choice: ')
+
+    def out_put_menu_icon_options(self):
         self.io.output(f'{self.requested_back} - {MenuIcons.BACK}')
         self.io.output(f'{self.requested_main} - {MenuIcons.BACK_MAIN}')
         self.io.output(f'{self.requested_exit} - {MenuIcons.EXIT}')
-        return self.io.input('enter your choice: ')
 
     def validate_default_options(self, choice: str, is_root: bool) -> Union[MenuIcons.CONTINUE, MenuIcons.BACK_MAIN, MenuIcons.EXIT]:
         if choice == self.requested_back or choice == MenuIcons.BACK:
