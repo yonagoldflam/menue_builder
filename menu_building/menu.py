@@ -1,4 +1,6 @@
 from typing import Union, List
+from unittest import case
+
 from menu_building.items.function_item import FunctionItem
 import consts
 from consts import *
@@ -42,20 +44,15 @@ class Menu:
 
             item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
             self.execute_if_is_function(item_choice)
-            result = self.run_if_is_sub_menu(item_choice, is_root)
-            if result == EXIT_MENU:
-                return EXIT_MENU
+            if isinstance(item_choice, Menu):
+                result = item_choice.run_menu(is_root=False)
+                match result:
+                    case consts.BACK_MAIN_MENU:
+                        if not is_root:
+                            return BACK_MAIN_MENU
 
-            if result == BACK_MAIN_MENU:
-                return BACK_MAIN_MENU
-
-    def run_if_is_sub_menu(self, item_choice: Union['Menu', FunctionItem], is_root: bool) :
-        if isinstance(item_choice, Menu):
-            result = item_choice.run_menu(is_root=False)
-            if result == BACK_MAIN_MENU and is_root:
-                result = None
-            return result
-        return None
+                    case consts.EXIT_MENU:
+                        return EXIT_MENU
 
     def output_menu_and_input_choice(self, items: List[Union['Menu', FunctionItem]] ) -> str:
         for number, item in enumerate(items):
