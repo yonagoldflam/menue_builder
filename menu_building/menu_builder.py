@@ -2,13 +2,13 @@ from typing import List, Callable
 
 from menu_building.menu import Menu
 from menu_building.items.function_item import FunctionItem
-from consts import *
+from consts import DefaultKeys
 
 class MenuBuilder:
     def __init__(self):
         self.menus: dict[str, Menu] = {}
 
-    def add_menu(self, io, title: str, abc_option: bool = False, requested_exit: str = DEFAULT_EXIT_KEY, requested_main:str = DEFAULT_MAIN_KEY, requested_back: str = DEFAULT_BACK_KEY):
+    def add_menu(self, io, title: str, abc_option: bool = False, requested_exit: str = DefaultKeys.EXIT_KEY, requested_main:str = DefaultKeys.MAIN_KEY, requested_back: str = DefaultKeys.BACK_KEY):
         menu = Menu(io, title, abc_option, requested_exit, requested_main, requested_back)
         self.menus[title] = menu
 
