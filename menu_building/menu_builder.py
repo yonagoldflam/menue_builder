@@ -8,8 +8,8 @@ class MenuBuilder:
     def __init__(self):
         self.menus: dict[str, Menu] = {}
 
-    def add_menu(self, io, title: str, requested_exit: str = DEFAULT_EXIT_KEY, requested_main:str = DEFAULT_MAIN_KEY, requested_back: str = DEFAULT_BACK_KEY):
-        menu = Menu(io, title, requested_exit, requested_main, requested_back)
+    def add_menu(self, io, title: str, abc_option: bool = False, requested_exit: str = DEFAULT_EXIT_KEY, requested_main:str = DEFAULT_MAIN_KEY, requested_back: str = DEFAULT_BACK_KEY):
+        menu = Menu(io, title, abc_option, requested_exit, requested_main, requested_back)
         self.menus[title] = menu
 
     def add_sub_menu_item(self, menu_title: str, sub_menu_title: str):

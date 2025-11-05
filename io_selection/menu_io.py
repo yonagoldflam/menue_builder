@@ -7,3 +7,8 @@ class MenuIo(ABC):
     @abstractmethod
     def input(self, prompt: str) -> str:
         pass
+#
+# a = 'a'
+# b = 65
+# print(chr(b))
+# print(ord(a))

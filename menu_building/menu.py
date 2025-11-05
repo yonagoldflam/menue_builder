@@ -7,17 +7,18 @@ from consts import *
 
 class Menu:
 
-    def __init__(self, io, title: str, requested_exit: str, requested_main:str, requested_back: str) -> None:
+    def __init__(self, io, title: str, abc_option: bool, requested_exit: str, requested_main:str, requested_back: str) -> None:
         self.io = io
         self.title = title
         self.items: List[Union[FunctionItem, Menu]] = []
         self.requested_exit = requested_exit
         self.requested_main = requested_main
         self.requested_back = requested_back
+        self.abc_option = abc_option
 
     def run_menu(self, is_root: bool = True) -> Union[str, None]:
         while True:
-            choice: str = self.output_menu_and_input_choice(self.items)
+            choice: str = self.output_menu_and_input_choice(self.items, self.abc_option)
 
             result = self.validate_default_options(choice, is_root)
             match result:
@@ -36,10 +37,9 @@ class Menu:
                 case None:
                     pass
 
-            index_choice: int = int(choice) - 1
+            index_choice = self.validate_choice_and_convert_to_int(choice, self.abc_option)
 
-            if index_choice >= len(self.items) or index_choice < 0:
-                self.io.output('invalid choice!! please enter your choice again')
+            if index_choice == CONTINUE_MENU:
                 continue
 
             item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
@@ -54,7 +54,15 @@ class Menu:
                     case consts.EXIT_MENU:
                         return EXIT_MENU
 
-    def output_menu_and_input_choice(self, items: List[Union['Menu', FunctionItem]] ) -> str:
+    def output_menu_and_input_choice(self, items: List[Union['Menu', FunctionItem]],abc_option ) -> str:
+        if abc_option:
+            for number, item in enumerate(items):
+                self.io.output(f'{chr(number + 65)} - {item.title}')
+            self.io.output(f'{self.requested_back} - back to the previous menu')
+            self.io.output(f'{self.requested_main} - return to the main menu')
+            self.io.output(f'{self.requested_exit} - exiting the program')
+            return self.io.input('enter your choice: ')
+
         for number, item in enumerate(items):
             self.io.output(f'{number + 1} - {item.title}')
         self.io.output(f'{self.requested_back} - back to the previous menu')
@@ -63,10 +71,6 @@ class Menu:
         return self.io.input('enter your choice: ')
 
     def validate_default_options(self, choice: str, is_root: bool):
-        if not self.choice_validate(choice=choice, options=[self.requested_main, self.requested_back, self.requested_exit],
-                           conditions=[choice.isdigit(), False]):
-            return CONTINUE_MENU
-
         if choice == self.requested_back:
             if is_root:
                 self.io.output('you are already on the main menu')
@@ -87,12 +91,21 @@ class Menu:
             item_choice.input_arguments(self.io)
             item_choice.execute()
 
-    def choice_validate(self, choice = None, options: List[str] = (), conditions: List[bool]=()) -> bool:
-        for option in options:
-            if option == choice:
-                return True
-        for condition in conditions:
-            if condition:
-                return True
-        self.io.output('invalid choice!! please enter your choice again')
-        return False
+    def validate_choice_and_convert_to_int(self, choice: str, abc_option: bool):
+        if abc_option:
+            if len(choice) != 1:
+                self.io.output('invalid choice!! please enter your choice again')
+                return CONTINUE_MENU
+            index_choice = ord(choice.upper()) - 65
+        else:
+            if not choice.isdigit():
+                self.io.output('invalid choice!! please enter your choice again')
+                return CONTINUE_MENU
+            index_choice = int(choice) - 1
+
+        if index_choice >= len(self.items) or index_choice < 0:
+            self.io.output('invalid choice!! please enter your choice again')
+            return CONTINUE_MENU
+        return index_choice
+
+

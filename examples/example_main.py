@@ -37,7 +37,7 @@ menu_builder.add_menu(io=io, title='print')
 menu_builder.add_sub_menu_item('print', sub_menu_title= 'hello')
 menu_builder.add_function_item(menu_title= 'print', name = 'world', function=print_world)
 
-menu_builder.add_menu(io = io, title = 'main menu', requested_main='20',requested_exit='10',requested_back='30')
+menu_builder.add_menu(io = io, title = 'main menu', abc_option=True, requested_main='20',requested_exit='10',requested_back='30')
 menu_builder.add_sub_menu_item('main menu', sub_menu_title='print')
 menu_builder.add_function_item('zalmen', 'shneyor', menu_title='main menu',name = 'print name', function=print_name, parms=['name1', 'name2'])
 
