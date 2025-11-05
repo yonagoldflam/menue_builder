@@ -17,9 +17,6 @@ class Menu:
         while True:
             choice: str = self.output_menu_and_input_choice(self.items)
 
-            if self.validation(tested=choice ,strings=(self.requested_main, self.requested_back, self.requested_exit), boolians=(choice.isdigit(), False)):
-                continue
-
             result = self.validate_default_options(choice, is_root)
             match result:
                 case consts.CONTINUE_MENU:
@@ -69,6 +66,10 @@ class Menu:
         return self.io.input('enter your choice: ')
 
     def validate_default_options(self, choice: str, is_root: bool):
+        if self.validation(tested=choice, strings=(self.requested_main, self.requested_back, self.requested_exit),
+                           boolians=(choice.isdigit(), False)):
+            return CONTINUE_MENU
+
         if choice == self.requested_back:
             if is_root:
                 self.io.output('you are already on the main menu')
