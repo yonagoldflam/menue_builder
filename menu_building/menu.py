@@ -1,10 +1,11 @@
 from typing import Union, List
 from menu_building.items.function_item import FunctionItem
+import consts
 from consts import *
 
 class Menu:
 
-    def __init__(self, io, title: str, requested_exit: str = DEFAULT_EXIT_KEY, requested_main:str = DEFAULT_MAIN_KEY, requested_back: str = DEFAULT_BACK_KEY) -> None:
+    def __init__(self, io, title: str, requested_exit: str, requested_main:str, requested_back: str) -> None:
         self.io = io
         self.title = title
         self.items: List[Union[FunctionItem, Menu]] = []
@@ -19,20 +20,22 @@ class Menu:
             if self.validation(tested=choice ,strings=(self.requested_main, self.requested_back, self.requested_exit), boolians=(choice.isdigit(), False)):
                 continue
 
-            if choice == self.requested_exit:
-                return EXIT_MENU
-
-            if choice == self.requested_back:
-                if is_root:
-                    self.io.output('you are already on the main menu')
+            result = self.validate_default_options(choice, is_root)
+            match result:
+                case consts.CONTINUE_MENU:
                     continue
-                return None
 
-            if choice == self.requested_main:
-                if is_root:
-                    self.io.output('you are already on the main menu')
-                    continue
-                return BACK_MAIN_MENU
+                case consts.EXIT_MENU:
+                    return EXIT_MENU
+
+                case consts.BACK_MAIN_MENU:
+                    return BACK_MAIN_MENU
+
+                case consts.BACK_MENU:
+                    return BACK_MENU
+
+                case None:
+                    pass
 
             index_choice: int = int(choice) - 1
 
@@ -42,14 +45,14 @@ class Menu:
 
             item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
             self.execute_if_is_function(item_choice)
-            result = self.run_sub_menu(item_choice, is_root)
+            result = self.run_if_is_sub_menu(item_choice, is_root)
             if result == EXIT_MENU:
                 return EXIT_MENU
 
             if result == BACK_MAIN_MENU:
                 return BACK_MAIN_MENU
 
-    def run_sub_menu(self, item_choice: Union['Menu', FunctionItem], is_root: bool) :
+    def run_if_is_sub_menu(self, item_choice: Union['Menu', FunctionItem], is_root: bool) :
         if isinstance(item_choice, Menu):
             result = item_choice.run_menu(is_root=False)
             if result == BACK_MAIN_MENU and is_root:
@@ -64,6 +67,24 @@ class Menu:
         self.io.output(f'{self.requested_main} - return to the main menu')
         self.io.output(f'{self.requested_exit} - exiting the program')
         return self.io.input('enter your choice: ')
+
+    def validate_default_options(self, choice: str, is_root: bool):
+        if choice == self.requested_back:
+            if is_root:
+                self.io.output('you are already on the main menu')
+                return CONTINUE_MENU
+            return BACK_MENU
+
+        if choice == self.requested_main:
+            if is_root:
+                self.io.output('you are already on the main menu')
+                return CONTINUE_MENU
+            return BACK_MAIN_MENU
+
+        if choice == self.requested_exit:
+            return EXIT_MENU
+
+
 
     def execute_if_is_function(self, item_choice: Union['Menu', FunctionItem]) -> None:
         if isinstance(item_choice, FunctionItem):

@@ -1,5 +1,7 @@
 EXIT_MENU = 'exit'
 BACK_MAIN_MENU = 'main'
+BACK_MENU = 'back'
+CONTINUE_MENU = 'continue'
 DEFAULT_EXIT_KEY = '*'
 DEFAULT_MAIN_KEY = '#'
 DEFAULT_BACK_KEY = '0'
