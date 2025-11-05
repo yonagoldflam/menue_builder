@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Tuple
 from unittest import case
 
 from menu_building.items.function_item import FunctionItem
@@ -63,8 +63,8 @@ class Menu:
         return self.io.input('enter your choice: ')
 
     def validate_default_options(self, choice: str, is_root: bool):
-        if self.validation(tested=choice, strings=(self.requested_main, self.requested_back, self.requested_exit),
-                           boolians=(choice.isdigit(), False)):
+        if not self.choice_validate(choice=choice, options=[self.requested_main, self.requested_back, self.requested_exit],
+                           conditions=[choice.isdigit(), False]):
             return CONTINUE_MENU
 
         if choice == self.requested_back:
@@ -82,19 +82,17 @@ class Menu:
         if choice == self.requested_exit:
             return EXIT_MENU
 
-
-
     def execute_if_is_function(self, item_choice: Union['Menu', FunctionItem]) -> None:
         if isinstance(item_choice, FunctionItem):
             item_choice.input_arguments(self.io)
             item_choice.execute()
 
-    def validation(self, tested = None, strings= (), boolians= ()) -> bool:
-        for test in strings:
-            if test == tested:
-                return False
-        for boolian in boolians:
-            if boolian:
-                return False
+    def choice_validate(self, choice = None, options: List[str] = (), conditions: List[bool]=()) -> bool:
+        for option in options:
+            if option == choice:
+                return True
+        for condition in conditions:
+            if condition:
+                return True
         self.io.output('invalid choice!! please enter your choice again')
-        return True
+        return False
