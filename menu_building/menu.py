@@ -1,5 +1,4 @@
-from typing import Union, List, Tuple
-from unittest import case
+from typing import Union, List
 
 from menu_building.items.function_item import FunctionItem
 import consts
