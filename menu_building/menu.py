@@ -37,12 +37,13 @@ class Menu:
                 case None:
                     pass
 
-            index_choice = self.validate_choice_and_convert_to_int(choice, self.abc_option)
+            item_choice: Union[Menu, FunctionItem, None] = self.analysis_choice(choice)
+            if not item_choice:
+                index_choice = self.validate_choice_and_convert_to_int(choice, self.abc_option)
+                if index_choice == CONTINUE_MENU:
+                    continue
 
-            if index_choice == CONTINUE_MENU:
-                continue
-
-            item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
+                item_choice: Union[Menu, FunctionItem] = self.items[index_choice]
             self.execute_if_is_function(item_choice)
             if isinstance(item_choice, Menu):
                 result = item_choice.run_menu(is_root=False)
@@ -58,32 +59,32 @@ class Menu:
         if abc_option:
             for number, item in enumerate(items):
                 self.io.output(f'{chr(number + 65)} - {item.title}')
-            self.io.output(f'{self.requested_back} - back to the previous menu')
-            self.io.output(f'{self.requested_main} - return to the main menu')
-            self.io.output(f'{self.requested_exit} - exiting the program')
+            self.io.output(f'{self.requested_back} - {BACK_MENU}')
+            self.io.output(f'{self.requested_main} - {BACK_MAIN_MENU}')
+            self.io.output(f'{self.requested_exit} - {EXIT_MENU}')
             return self.io.input('enter your choice: ')
 
         for number, item in enumerate(items):
             self.io.output(f'{number + 1} - {item.title}')
-        self.io.output(f'{self.requested_back} - back to the previous menu')
-        self.io.output(f'{self.requested_main} - return to the main menu')
-        self.io.output(f'{self.requested_exit} - exiting the program')
+        self.io.output(f'{self.requested_back} - {BACK_MENU}')
+        self.io.output(f'{self.requested_main} - {BACK_MAIN_MENU}')
+        self.io.output(f'{self.requested_exit} - {EXIT_MENU}')
         return self.io.input('enter your choice: ')
 
     def validate_default_options(self, choice: str, is_root: bool):
-        if choice == self.requested_back:
+        if choice == self.requested_back or choice == BACK_MENU:
             if is_root:
                 self.io.output('you are already on the main menu')
                 return CONTINUE_MENU
             return BACK_MENU
 
-        if choice == self.requested_main:
+        if choice == self.requested_main or choice == BACK_MAIN_MENU:
             if is_root:
                 self.io.output('you are already on the main menu')
                 return CONTINUE_MENU
             return BACK_MAIN_MENU
 
-        if choice == self.requested_exit:
+        if choice == self.requested_exit or choice == EXIT_MENU:
             return EXIT_MENU
 
     def execute_if_is_function(self, item_choice: Union['Menu', FunctionItem]) -> None:
@@ -107,5 +108,11 @@ class Menu:
             self.io.output('invalid choice!! please enter your choice again')
             return CONTINUE_MENU
         return index_choice
+
+    def analysis_choice(self, choice: str) -> Union[FunctionItem, 'Menu', None]:
+        for item in self.items:
+            if item.title == choice:
+                return item
+        return None
 
 
