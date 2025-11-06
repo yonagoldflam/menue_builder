@@ -1,46 +1,44 @@
-from typing import Union, List
+from typing import Union, List, Dict
 
 from menu_building.items.function_item import FunctionItem
+from index_methods.index_method import IndexMethod, NumberIndex, AbcIndex
 from consts import MenuIcons
+
 
 class Menu:
 
-    def __init__(self, io, title: str, abc_option: bool, requested_exit: str, requested_main:str, requested_back: str) -> None:
+    def __init__(self, io, title: str, requested_exit: str, requested_main:str, requested_back: str, index_type: IndexMethod) -> None:
         self.io = io
         self.title = title
         self.items: List[Union[FunctionItem, Menu]] = []
         self.requested_exit = requested_exit
         self.requested_main = requested_main
         self.requested_back = requested_back
-        self.abc_option = abc_option
+        self.index_type = index_type
+
 
     def run_menu(self, is_root: bool = True) -> Union[str, None]:
         while True:
-            choice: str = self.output_menu_and_input_choice(self.items, self.abc_option)
+            choice: Union[Menu, FunctionItem, str] = self.output_menu_and_input_choice()
+            if isinstance(choice, str):
 
-            result = self.validate_default_options(choice, is_root)
-            match result:
-                case MenuIcons.CONTINUE:
-                    continue
+                result = self.validate_default_options(choice, is_root)
+                match result:
+                    case MenuIcons.CONTINUE:
+                        continue
 
-                case MenuIcons.EXIT:
-                    return MenuIcons.EXIT
+                    case MenuIcons.EXIT:
+                        return MenuIcons.EXIT
 
-                case MenuIcons.BACK_MAIN:
-                    return MenuIcons.BACK_MAIN
+                    case MenuIcons.BACK_MAIN:
+                        return MenuIcons.BACK_MAIN
 
-                case MenuIcons.BACK:
-                    return MenuIcons.BACK
+                    case MenuIcons.BACK:
+                        return MenuIcons.BACK
 
-                case None:
-                    pass
-
-            item_choice: Union[Menu, FunctionItem, MenuIcons.CONTINUE] = self.analysis_choice_and_select_item(choice, self.abc_option)
-            if item_choice == MenuIcons.CONTINUE:
-                continue
-            self.execute_if_is_function(item_choice)
-            if isinstance(item_choice, Menu):
-                result = item_choice.run_menu(is_root=False)
+            self.execute_if_is_function(choice)
+            if isinstance(choice, Menu):
+                result = choice.run_menu(is_root=False)
                 match result:
                     case MenuIcons.BACK_MAIN:
                         if not is_root:
@@ -49,17 +47,17 @@ class Menu:
                     case MenuIcons.EXIT:
                         return MenuIcons.EXIT
 
-    def output_menu_and_input_choice(self, items: List[Union['Menu', FunctionItem]],abc_option ) -> str:
-        if abc_option:
-            for number, item in enumerate(items):
-                self.io.output(f'{chr(number + 65)} - {item.title}')
-            self.out_put_menu_icon_options()
-            return self.io.input('enter your choice: ')
-
-        for number, item in enumerate(items):
-            self.io.output(f'{number + 1} - {item.title}')
+    def output_menu_and_input_choice(self) -> Union['Menu', FunctionItem, str]:
+        indexes: Dict[str, Union[Menu, FunctionItem]] = self.index_type.index_items(self.items)
+        for index, item in indexes.items():
+            if len(index) == 1:
+                self.io.output(f'{index} - {item.title}')
         self.out_put_menu_icon_options()
-        return self.io.input('enter your choice: ')
+        choice: str = self.io.input('enter your choice: ')
+
+        if choice.lower() in indexes:
+            return indexes[choice.lower()]
+        return choice
 
     def out_put_menu_icon_options(self):
         self.io.output(f'{self.requested_back} - {MenuIcons.BACK}')
@@ -67,6 +65,7 @@ class Menu:
         self.io.output(f'{self.requested_exit} - {MenuIcons.EXIT}')
 
     def validate_default_options(self, choice: str, is_root: bool) -> Union[MenuIcons.CONTINUE, MenuIcons.BACK_MAIN, MenuIcons.EXIT]:
+
         if choice == self.requested_back or choice == MenuIcons.BACK:
             if is_root:
                 self.io.output('you are already on the main menu')
@@ -82,36 +81,13 @@ class Menu:
         if choice == self.requested_exit or choice == MenuIcons.EXIT:
             return MenuIcons.EXIT
 
+        self.io.output('invalid choice!! please enter your choice again')
+        return MenuIcons.CONTINUE
+
     def execute_if_is_function(self, item_choice: Union['Menu', FunctionItem]) -> None:
         if isinstance(item_choice, FunctionItem):
             item_choice.input_arguments(self.io)
             item_choice.execute()
-
-    def analysis_choice_and_select_item(self, choice: str, abc_option) -> Union[FunctionItem, 'Menu', MenuIcons.CONTINUE]:
-        for item in self.items:
-            if item.title.lower() == choice.lower():
-                return item
-        index_choice = self.validate_choice_and_convert_to_int(choice, abc_option)
-        if index_choice == MenuIcons.CONTINUE:
-            return MenuIcons.CONTINUE
-        return self.items[index_choice]
-
-    def validate_choice_and_convert_to_int(self, choice: str, abc_option: bool):
-        if abc_option:
-            if len(choice) != 1:
-                self.io.output('invalid choice!! please enter your choice again')
-                return MenuIcons.CONTINUE
-            index_choice = ord(choice.upper()) - 65
-        else:
-            if not choice.isdigit():
-                self.io.output('invalid choice!! please enter your choice again')
-                return MenuIcons.CONTINUE
-            index_choice = int(choice) - 1
-
-        if index_choice >= len(self.items) or index_choice < 0:
-            self.io.output('invalid choice!! please enter your choice again')
-            return MenuIcons.CONTINUE
-        return index_choice
 
 
 
