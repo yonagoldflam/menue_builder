@@ -1,5 +1,4 @@
-from menu_building.menu_builder import MenuBuilder
-from io_selection.console_io import ConsoleIo
+from menu_builder import MenuBuilder, ConsoleIo
 
 
 
@@ -41,4 +40,5 @@ menu_builder.add_menu(io = io, title = 'main menu', abc_option=True, requested_m
 menu_builder.add_sub_menu_item('main menu', sub_menu_title='print')
 menu_builder.add_function_item('zalmen', 'shneyor', menu_title='main menu',name = 'print name', function=print_name, parms=['name1', 'name2'])
 
-menu_builder.run_menu('main menu')
+if __name__ == '__main__':
+    menu_builder.run_menu('main menu')

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import List, Union, Dict
 
-from menu_building.items.function_item import FunctionItem
+
 # from menu_building.menu import Menu
 
 
 class IndexMethod(ABC):
+
     @staticmethod
     @abstractmethod
     def index_items(items):
@@ -13,6 +13,7 @@ class IndexMethod(ABC):
 
 
 class NumberIndex(IndexMethod):
+
     @staticmethod
     def index_items(items):
         dict_index = {}
@@ -24,6 +25,7 @@ class NumberIndex(IndexMethod):
 
 
 class AbcIndex(IndexMethod):
+
     @staticmethod
     def index_items(items):
         dict_index = {}
@@ -35,6 +37,7 @@ class AbcIndex(IndexMethod):
 
 
 class TextIndex(IndexMethod):
+
     @staticmethod
     def index_items(items):
         dict_index = {}

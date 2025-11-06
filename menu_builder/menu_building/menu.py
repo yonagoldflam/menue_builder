@@ -1,8 +1,8 @@
 from typing import Union, List, Dict
 
-from menu_building.items.function_item import FunctionItem
-from index_methods.index_method import IndexMethod, NumberIndex, AbcIndex
-from consts import MenuIcons
+from menu_builder.menu_building.items.function_item import FunctionItem
+from ..index_methods.index_method import IndexMethod
+from menu_builder.consts import MenuIcons
 
 
 class Menu:
@@ -21,7 +21,6 @@ class Menu:
         while True:
             choice: Union[Menu, FunctionItem, str] = self.output_menu_and_input_choice()
             if isinstance(choice, str):
-
                 result = self.validate_default_options(choice, is_root)
                 match result:
                     case MenuIcons.CONTINUE:
@@ -52,11 +51,13 @@ class Menu:
         for index, item in indexes.items():
             if len(index) == 1:
                 self.io.output(f'{index} - {item.title}')
+
         self.out_put_menu_icon_options()
         choice: str = self.io.input('enter your choice: ')
 
         if choice.lower() in indexes:
             return indexes[choice.lower()]
+
         return choice
 
     def out_put_menu_icon_options(self):
