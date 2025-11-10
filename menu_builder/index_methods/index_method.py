@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
+from typing import List, Dict
 
-
-# from menu_building.menu import Menu
+from menu_builder.menu_building.items.menu_item import MenuItem
 
 
 class IndexMethod(ABC):
 
     @staticmethod
     @abstractmethod
-    def index_items(items):
+    def index_items(items: List[MenuItem]) -> Dict[str, MenuItem]:
         pass
 
 
@@ -35,12 +35,3 @@ class AbcIndex(IndexMethod):
             dict_index[chr(number + 97).lower()] = item
         return dict_index
 
-
-class TextIndex(IndexMethod):
-
-    @staticmethod
-    def index_items(items):
-        dict_index = {}
-        for item in items:
-            dict_index[item.title] = item
-        return dict_index
