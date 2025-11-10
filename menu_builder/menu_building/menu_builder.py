@@ -2,8 +2,9 @@ from typing import List, Callable
 
 from menu_builder.menu_building.menu import Menu
 from menu_builder.consts import DefaultKeys
-from .items.menu_item import MenuItem, FunctionItem
-from ..index_methods.index_method import NumberIndex, AbcIndex
+from .items.function_item import FunctionItem
+from ..index_methods.numbers_index import NumberIndex
+from ..index_methods.abc_index import AbcIndex
 
 class MenuBuilder:
     def __init__(self):
