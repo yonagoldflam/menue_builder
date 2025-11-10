@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-
+from menu_builder.consts import MenuIcons
 
 class MenuItem(ABC):
     parent: 'MenuItem'
+    title: str
     @abstractmethod
     def select(self):
         pass
@@ -38,7 +39,7 @@ class FunctionItem(MenuItem):
 class Back(MenuItem):
 
     def __init__(self, parent: MenuItem):
-
+        self. title = MenuIcons.BACK
         self.parent = parent
 
     def select(self):
@@ -53,6 +54,7 @@ class Back(MenuItem):
 class Home(MenuItem):
 
     def __init__(self, parent: MenuItem):
+        self.title = MenuIcons.BACK_MAIN
         self.parent = parent
 
     def select(self):
@@ -65,6 +67,7 @@ class Home(MenuItem):
 class Exit(MenuItem):
     def __init__(self, parent: MenuItem):
         self.parent = parent
+        self.title = MenuIcons.EXIT
 
     def select(self):
         pass
