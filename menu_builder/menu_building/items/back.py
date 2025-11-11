@@ -1,10 +1,11 @@
 from menu_builder.menu_building.items.menu_item import MenuItem
 from menu_builder.consts import MenuIcons
 
+
 class Back(MenuItem):
 
     def __init__(self, parent: MenuItem):
-        self. title = MenuIcons.BACK
+        self.title = MenuIcons.BACK
         self.parent = parent
 
     def select(self):

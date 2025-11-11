@@ -4,6 +4,7 @@ class MenuIcons:
     BACK = 'back'
     CONTINUE = 'continu'
 
+
 class DefaultKeys:
     EXIT_KEY = '*'
     MAIN_KEY = '#'

@@ -16,8 +16,13 @@ class NumberIndex(IndexMethod):
         for number, item in enumerate(items):
             dict_index[str(number + 1)] = item
 
-        dict_index[back_keys[MenuIcons.BACK_MAIN]] = Home(parent)
-        dict_index[back_keys[MenuIcons.BACK]] = Back(parent)
-        dict_index[back_keys[MenuIcons.EXIT]] = Exit(parent)
+        if MenuIcons.BACK_MAIN in back_keys:
+            dict_index[back_keys[MenuIcons.BACK_MAIN]] = Home(parent)
+
+        if MenuIcons.BACK in back_keys:
+            dict_index[back_keys[MenuIcons.BACK]] = Back(parent)
+
+        if MenuIcons.EXIT in back_keys:
+            dict_index[back_keys[MenuIcons.EXIT]] = Exit(parent)
 
         return dict_index
